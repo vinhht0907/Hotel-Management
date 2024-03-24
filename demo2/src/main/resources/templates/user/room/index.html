@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/room.css">
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined"></span>
+        </div>
+        <div class="header-right">
+<!--          <span class="material-icons-outlined">notifications</span>-->
+<!--          <span class="material-icons-outlined">email</span>-->
+          <a th:href="@{/logout}" style="text-decoration: none">
+            <span class="material-icons-outlined">account_circle</span>
+          </a>
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <a th:href="@{/user/trangchu}"  style="text-decoration: none">
+              <span class="material-icons-outlined">home</span> Hotel
+            </a>
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/book/list}">
+              <span class="material-icons-outlined">fact_check</span> Booking
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/product/list}">
+              <span class="material-icons-outlined">inventory_2</span> Service
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/room/list}" >
+              <span class="material-icons-outlined">room</span> Room
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/bill/list}">
+              <span class="material-icons-outlined">payment</span> Payment
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- End Sidebar -->
+
+      <!-- Main -->
+      <main class="main-container">
+        <div class="charts">
+
+          <div class="charts-card">
+            <p class="chart-title">Thiết Lập Phòng</p>
+            <a th:href="@{/user/room/create}"><button type="submit" class="buton">Thêm</button></a>
+            <table>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên Phòng</th>
+                  <th>Loại Phòng</th>
+                  <th>Trạng Thái</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="room:${rList}">
+                  <th th:text="${rList.indexOf(room)+1}"></th>
+                  <td th:text="${room.name}"></td>
+                  <td th:text="${room.category.name}"></td>
+                  <td th:text="${room.status.name}"></td>
+                  <td>
+                    <a th:href="@{'/user/room/edit?id='+${room.id}}"><span class="material-icons-outlined">edit</span></a>
+                    <a th:href="@{'/user/room/delete?id='+${room.id}}"><span class="material-icons-outlined">delete</span></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="bar-chart">
+            </div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">Thiết Lập Loại </p>
+            <a th:href="@{/user/category/create}"><button type="submit" class="buton">Thêm</button></a>
+            <table>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên Loại </th>
+                  <th>Giá Phòng</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="cate:${cList}">
+                  <th th:text="${cList.indexOf(cate)+1}"></th>
+                  <td th:text="${cate.name}"></td>
+                  <td th:text="${cate.price}"></td>
+                  <td>
+                    <a th:href="@{'/user/category/edit?id='+${cate.id}}"><span class="material-icons-outlined">edit</span></a>
+                    <a th:href="@{'/user/category/delete?id='+${cate.id}}"<span class="material-icons-outlined">delete</span></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </main>
+      <!-- End Main -->
+
+    </div>
+
+    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <!-- Custom JS -->
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

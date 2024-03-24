@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/book.css">
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined"></span>
+        </div>
+        <div class="header-right">
+<!--          <span class="material-icons-outlined">notifications</span>-->
+<!--          <span class="material-icons-outlined">email</span>-->
+          <a th:href="@{/logout}" style="text-decoration: none">
+            <span class="material-icons-outlined">account_circle</span>
+          </a>
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <a th:href="@{/user/trangchu}"  style="text-decoration: none">
+              <span class="material-icons-outlined">home</span> Hotel
+            </a>
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/book/list}">
+              <span class="material-icons-outlined">fact_check</span> Booking
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/product/list}">
+              <span class="material-icons-outlined">inventory_2</span> Service
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/room/list}">
+              <span class="material-icons-outlined">room</span> Room
+            </a>
+          </li>
+
+          <li class="sidebar-list-item">
+            <a th:href="@{/user/bill/list}">
+              <span class="material-icons-outlined">payment</span> Payment
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- End Sidebar -->
+
+      <!-- Main -->
+      <main class="main-container">
+        <form th:action="@{/user/book/edit}" th:object="${customer}" method="post">
+          <div class="charts">
+
+            <div class="charts-card">
+              <p class="chart-title">Thông tin khách hàng</p>
+              <input type="text" name="id" class="nin" th:field="*{id}" hidden="true"/>
+              <label>Tên Khách Hàng:</label></br>
+              <input type="text" name="name" class="nin" th:field="*{name}"/>
+              <label>Số điện thoại:</label></br>
+              <input type="text" name="sdt" class="nin" th:field="*{sdt}"/>
+              <label>Số căn cước công dân:</label></br>
+              <input type="text" name="cccd" class="nin" th:field="*{cccd}"/>
+              <label>Số người ở:</label></br>
+              <input type="text" name="numofpeople" class="nin" th:field="*{numofpeople}"/>
+              <label>Số ngày ở:</label></br>
+              <input type="text" name="numofday" class="nin" th:field="*{numofday}"/>
+              <button type="submit" class="buton">Lưu</button>
+            </div>
+
+            <div class="charts-card">
+              <p class="chart-title">Đặt phòng</p>
+              <label>Ngày thuê:</label></br>
+              <input type="date" name="checkin" th:value="*{checkin}" style="width: 40%;margin: 15px 0px;height: 30px;font-size: 18px;border-radius: 5px;"/></br>
+              <label class="for">Ngày trả:</label></br>
+              <input type="date" name="checkout" th:value="*{checkout}" style="width: 40%;margin: 15px 0px;height: 30px;font-size: 18px;border-radius: 5px;"/>
+              <table>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên phòng</th>
+                    <th>Loại phòng</th>
+<!--                    <th>Action</th>-->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="room:${rList}">
+                    <th th:text="${rList.indexOf(room)+1}"></th>
+                    <td th:text="${room.name}"></td>
+                    <td th:text="${room.category.name}"></td>
+<!--                    <td>-->
+                        <input type="checkbox" th:checked="checked" name="room" th:value="${room.id}" hidden="true"/>
+                  </tr>
+                </tbody>
+              </table>
+              <table style="margin-top: 30px">
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên Dịch Vụ</th>
+                    <th>Giá</th>
+                    <!--                    <th>Action</th>-->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="pro:${pList}">
+                    <th th:text="${pList.indexOf(pro)+1}"></th>
+                    <td th:text="${pro.name}"></td>
+                    <td th:text="${pro.price}"></td>
+                    <!--                    <td>-->
+                    <input type="checkbox" th:checked="checked" name="product" th:value="${pro.id}" hidden="true"/>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </form>
+      </main>
+      <!-- End Main -->
+    </div>
+
+    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <!-- Custom JS -->
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

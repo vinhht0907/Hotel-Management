@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <!-- Montserrat Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../../css/createroom.css">
+</head>
+<body>
+<div class="grid-container">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="menu-icon" onclick="openSidebar()">
+      <span class="material-icons-outlined">menu</span>
+    </div>
+    <div class="header-left">
+      <span class="material-icons-outlined"></span>
+    </div>
+    <div class="header-right">
+      <!--          <span class="material-icons-outlined">notifications</span>-->
+      <!--          <span class="material-icons-outlined">email</span>-->
+      <a th:href="@{/logout}" style="text-decoration: none">
+        <span class="material-icons-outlined">account_circle</span>
+      </a>
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-title">
+      <div class="sidebar-brand">
+        <a th:href="@{/user/trangchu}"  style="text-decoration: none">
+          <span class="material-icons-outlined">home</span> Hotel
+        </a>
+      </div>
+      <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
+
+    <ul class="sidebar-list">
+      <li class="sidebar-list-item">
+        <a th:href="@{/user/book/list}">
+          <span class="material-icons-outlined">fact_check</span> Booking
+        </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a th:href="@{/user/product/list}" >
+          <span class="material-icons-outlined">inventory_2</span> Service
+        </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a th:href="@{/user/room/list}">
+          <span class="material-icons-outlined">room</span> Room
+        </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a th:href="@{/user/users/list}">
+          <span class="material-icons-outlined">supervised_user_circle</span> Users
+        </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a th:href="@{/user/bill/list}">
+          <span class="material-icons-outlined">payment</span> Payment
+        </a>
+      </li>
+    </ul>
+  </aside>
+  <!-- End Sidebar -->
+
+  <!-- Main -->
+  <main class="main-container">
+    <div class="charts">
+      <div class="charts-card-none"></div>
+
+      <div class="charts-card">
+        <p class="chart-title">Thiết Lập Dịch Vụ</p>
+        <form th:action="@{/user/users/edit}" th:object="${user}" method="post">
+          <input type="text" name="id" class="nin" th:field="*{id}" hidden="true"/>
+          <label>Tên nhân viên:</label></br>
+          <input type="text" name="name" class="nin" th:field="*{name}"/>
+          <label>Giới tính:</label></br>
+          <input type="text" name="gender" class="nin" th:field="*{gender}"/>
+          <label>Địa chỉ:</label></br>
+          <input type="text" name="address" class="nin" th:field="*{address}"/>
+          <label>Email:</label></br>
+          <input type="email" name="email" class="nin" th:field="*{email}"/>
+          <label>Số điện thoại:</label></br>
+          <input type="tel" name="sdt" class="nin" th:field="*{sdt}"/>
+          <label>Că cước công dân:</label></br>
+          <input type="text" name="cccd" class="nin" th:field="*{cccd}"/>
+          <label>Username:</label></br>
+          <input type="text" name="username" class="nin" th:field="*{username}"/>
+          <label>Password:</label></br>
+          <input type="password" name="password" class="nin" th:value="*{password}"/>
+          <label>Quyền:</label></br>
+          <select name="role" class="nin" required="true">
+            <option>--Chọn--</option>
+            <th:block th:each="cat:${rList}">
+              <th th:if="${user.role.id==cat.id}">
+                <option selected="selected" th:text="${cat.name}" th:value="${cat.id}"></option>
+              </th>
+              <th th:unless="${user.role.id==cat.id}">
+                <option th:text="${cat.name}" th:value="${cat.id}"></option>
+              </th>
+            </th:block>
+          </select>
+          <button type="submit" class="buton">Cập nhật</button>
+        </form>
+
+      </div>
+
+      <div class="charts-card-none"></div>
+    </div>
+  </main>
+  <!-- End Main -->
+
+</div>
+
+<!-- Scripts -->
+<!-- ApexCharts -->
+<!-- Custom JS -->
+<script src="js/scripts.js"></script>
+</body>
+</html>

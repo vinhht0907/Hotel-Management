@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+<!--    <script src="/webjars/chart.js/2.9.4/dist/Chart.min.js"></script>-->
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/statitis.css">
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/chartjs/2.9.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+  </head>
+  <body>
+    <div class="grid-container">
+
+      <!-- Header -->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined"></span>
+        </div>
+        <div class="header-right">
+<!--          <span class="material-icons-outlined">notifications</span>-->
+<!--          <span class="material-icons-outlined">email</span>-->
+          <a th:href="@{/logout}" style="text-decoration: none">
+            <span class="material-icons-outlined">account_circle</span>
+          </a>
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <span class="material-icons-outlined">home</span> Hotel
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/dashboard/list}">
+              <span class="material-icons-outlined">dashboard</span> Dashboard
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/book/list}">
+              <span class="material-icons-outlined">fact_check</span> Booking
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/product/list}">
+              <span class="material-icons-outlined">inventory_2</span> Service
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/room/list}">
+              <span class="material-icons-outlined">room</span> Room
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/users/list}">
+              <span class="material-icons-outlined">supervised_user_circle</span> Users
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/statitis/list}">
+              <span class="material-icons-outlined">analytics</span> Statistic
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a th:href="@{/admin/bill/list}">
+              <span class="material-icons-outlined">payment</span> Payment
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- End Sidebar -->
+
+      <!-- Main -->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold">STATITIS</p>
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <form th:action="@{/admin/statitis/tim}">
+              <label>Ngày bắt đầu:</label>
+              <input type="date"  name="ngaybd" style="margin-right: 50px; width: 200px; height: 30px;">
+              <label>Ngày kết thúc:</label>
+              <input type="date" name="ngaykt" style="margin-right:30px; width: 200px; height: 30px;">
+              <button type="submit" style="height: 30px; width: 50px; background-color: green; color: white; border-radius: 5px;">Tìm</button>
+            </form>
+
+            </br>
+            </br>
+            <buton style="height: 60px;
+            background-color: green; color: white; border-radius: 5px;"><a th:href="@{/admin/statitis/export}" style="text-decoration: none;color: white">Export to excel</a></buton>
+            <p class="chart-title">Doanh thu theo tháng</p>
+<!--            <div id="bar-chart"></div>-->
+            <canvas id="container"></canvas>
+
+<!--            <p class="chart-title">Doanh thu theo loại phòng</p>-->
+<!--            <canvas id="myChartss"></canvas>-->
+          </div>
+
+
+        </div>
+
+      </main>
+      <!-- End Main -->
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script th:inline="javascript">
+      let myChart = document.getElementById('container').getContext('2d');
+      // Global Options
+      Chart.defaults.global.defaultFontFamily = 'Lato';
+      Chart.defaults.global.defaultFontSize = 18;
+      Chart.defaults.global.defaultFontColor = '#777';
+
+      let massPopChart = new Chart(myChart, {
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+          labels:[[${keySet}]],
+          datasets:[{
+            label:'doanh thu',
+            data:[[${values}]],
+            //backgroundColor:'green',
+            backgroundColor:[
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
+              'rgba(255, 99, 132, 0.6)'
+            ],
+            borderWidth:1,
+            borderColor:'#777',
+            hoverBorderWidth:3,
+            hoverBorderColor:'#000'
+          }]
+        },
+        options:{
+          title:{
+            display:true,
+            text:'Doanh thu hàng tháng',
+            fontSize:25
+          },
+          legend:{
+            display:true,
+            position:'right',
+            labels:{
+              fontColor:'#000'
+            }
+          },
+          layout:{
+            padding:{
+              left:50,
+              right:0,
+              bottom:0,
+              top:0
+            }
+          },
+          tooltips:{
+            enabled:true
+          }
+        }
+      });
+
+<!--    <script th:inline="javascript">-->
+      var myChartss = document.getElementById('myChartss').getContext('2d');
+      // Global Options
+      Chart.defaults.global.defaultFontFamily = 'Lato';
+      Chart.defaults.global.defaultFontSize = 18;
+      Chart.defaults.global.defaultFontColor = '#777';
+
+      let massPopChartss = new Chart(myChartss, {
+        type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data:{
+          labels:[[${key}]],
+          datasets:[{
+            label:'loai phòng',
+            data:[[${val}]],
+            //backgroundColor:'green',
+            backgroundColor:[
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
+            ],
+            borderWidth: 1,
+            borderColor: '#777',
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#000'
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Doanh thu hàng tháng',
+            fontSize: 25
+          },
+          legend: {
+            display: true,
+            position: 'right',
+            labels: {
+              fontColor: '#000'
+            }
+          },
+          layout: {
+            padding: {
+              left: 50,
+              right: 0,
+              bottom: 0,
+              top: 0
+            }
+          },
+          tooltips: {
+            enabled: true
+          }
+        }
+      });
+    </script>
+    <script src="../../js/scripts.js"></script>
+  </body>
+</html>
